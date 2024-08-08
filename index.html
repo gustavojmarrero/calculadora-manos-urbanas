@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Manos Urbanas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --bg-color: #f8f9fa;
+      --card-bg: #fff;
+      --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 0.5rem;
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      animation: fade-in 0.5s ease-in-out;
+    }
+
+    .card-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-right: 0.5rem;
+    }
+
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #495057;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .result {
+      background-color: #f1f3f5;
+      border-radius: 0.25rem;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      animation: slide-up 0.5s ease-in-out;
+    }
+
+    .result p {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .result p:last-child {
+      margin-bottom: 0;
+    }
+
+    .result-value {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slide-up {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1 class="card-title">Calculadora Manos Urbanas</h1>
+      <div class="form-group">
+        <label for="pesos-argentinos" class="form-label">Pesos Argentinos:</label><span></span>
+        <input type="tel" class="form-control" id="pesos-argentinos" placeholder="Ingresa el monto en pesos argentinos" oninput="formatNumber(this); calculateConversion()">
+      </div>
+      <div class="result">
+        <p>Costo en pesos mexicanos: <span id="pesos-mexicanos-costo" class="result-value"></span></p>
+        <p>Precio de venta en pesos mexicanos: <span id="pesos-mexicanos-venta" class="result-value"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function formatNumber(input) {
+      let value = input.value;
+      value = value.replace(/\D/g, "");
+      value = value ? parseInt(value).toLocaleString("es-MX") : '';
+      input.value = value;
+    }
+
+    function calculateConversion() {
+      const inputElement = document.getElementById('pesos-argentinos');
+      const inputValue = inputElement.value.replace(/,/g, '');
+      const pesosArgentinos = inputValue ? parseFloat(inputValue) : 0;
+      const tipoCambio = 68; // 1 peso mexicano = 68 pesos argentinos
+      const precioVenta = 3; // Vender al triple del costo
+
+      const pesosMexicanosCosto = pesosArgentinos / tipoCambio;
+      const pesosMexicanosVenta = pesosMexicanosCosto * precioVenta;
+
+      document.getElementById('pesos-mexicanos-costo').textContent = pesosMexicanosCosto.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+      document.getElementById('pesos-mexicanos-venta').textContent = pesosMexicanosVenta.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    }
+
+    // Inicializar los valores en 0 al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('pesos-mexicanos-costo').textContent = (0).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+      document.getElementById('pesos-mexicanos-venta').textContent = (0).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    });
+  </script>
+</body>
+</html>
